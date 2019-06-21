@@ -1,6 +1,9 @@
 use serde_json::{json, Value};
 use std::env;
 
+mod env_getter;
+pub use env_getter::*;
+
 pub fn is_valid_platform() -> bool {
     let key = "APPLICATION_NAME";
 
