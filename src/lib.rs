@@ -5,18 +5,15 @@ mod env_getter;
 pub use env_getter::*;
 
 pub fn is_valid_platform() -> bool {
-    let key = "APPLICATION_NAME";
+    let key = "PLATFORM_APPLICATION_NAME";
 
-    match env::var(key) {
-        Ok(_) => true,
-        Err(_) => false,
-    }
+    can_get_env(&key)
 }
 pub fn in_build() -> bool {
-    true
+    is_valid_platform() && !can_get_env("PLATFORM_ENVIRONMENT")
 }
 pub fn in_runtime() -> bool {
-    true
+    is_valid_platform() && can_get_env("PLATFORM_ENVIRONMENT")
 }
 pub fn credentials(relationship: &str) -> Value {
     let _ = relationship;
