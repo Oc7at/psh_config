@@ -13,25 +13,25 @@ pub fn in_build() -> bool {
 pub fn in_runtime() -> bool {
     is_valid_platform() && can_get_env("PLATFORM_ENVIRONMENT")
 }
-pub fn credentials(relation: &str) -> Result<Value, &str> {
-    let relationships = get_json_from_var("PLATFORM_RELATIONSHIPS");
-    Ok(relationships[&relation][0].clone())
+pub fn credentials(relation: &str) -> Option<Value> {
+    let relationships = get_json_from_var("PLATFORM_RELATIONSHIPS")?;
+    Some(relationships[&relation][0].clone())
 }
-pub fn variable(name: &str) -> Result<&str, &str> {
+pub fn variable(name: &str) -> Option<&str> {
     let _ = name;
-    Ok("Ok")
+    Some("Ok")
 }
-pub fn variables() -> Value {
+pub fn variables() -> Option<Value> {
     get_json_from_var("PLATFORM_VARIABLES")
 }
-pub fn routes() -> Value {
+pub fn routes() -> Option<Value> {
     get_json_from_var("PLATFORM_ROUTES")
 }
-pub fn get_route(id: &str) -> Result<Value, &str> {
+pub fn get_route(id: &str) -> Option<Value> {
     let _ = id;
-    Ok(json!(null))
+    Some(json!(null))
 }
-pub fn application() -> Value {
+pub fn application() -> Option<Value> {
     get_json_from_var("PLATFORM_APPLICATION")
 }
 pub fn on_enterprise() -> bool {
