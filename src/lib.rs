@@ -15,9 +15,9 @@ pub fn in_build() -> bool {
 pub fn in_runtime() -> bool {
     is_valid_platform() && can_get_env("PLATFORM_ENVIRONMENT")
 }
-pub fn credentials(relationship: &str) -> Value {
-    let _ = relationship;
-    json!(null)
+pub fn credentials(relation: &str) -> Result<Value, &str> {
+    let relationships = get_json_from_var("PLATFORM_RELATIONSHIPS");
+    Ok(relationships[&relation][0].clone())
 }
 pub fn variable(name: &str) -> Result<&str, &str> {
     let _ = name;
@@ -37,10 +37,15 @@ pub fn application() -> Value {
     json!(null)
 }
 pub fn on_enterprise() -> bool {
-    true
+    is_valid_platform() && env::var("PLATFORM_MODE").unwrap() == "enterprise"
 }
 pub fn on_production() -> bool {
-    true
+    let prod_branch = if on_enterprise() {
+        "production"
+    } else {
+        "master"
+    };
+    env::var("PLATFORM_BRANCH").unwrap() == prod_branch
 }
 //pub fn registerFormatter(name: &str, callable $formatter) : self
 //pub fn formattedCredentials(string $relationship, string $formatter)
