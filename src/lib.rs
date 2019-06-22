@@ -5,9 +5,7 @@ mod env_getter;
 pub use env_getter::*;
 
 pub fn is_valid_platform() -> bool {
-    let key = "PLATFORM_APPLICATION_NAME";
-
-    can_get_env(&key)
+    can_get_env("PLATFORM_APPLICATION_NAME")
 }
 pub fn in_build() -> bool {
     is_valid_platform() && !can_get_env("PLATFORM_ENVIRONMENT")
@@ -34,7 +32,7 @@ pub fn get_route(id: &str) -> Result<Value, &str> {
     Ok(json!(null))
 }
 pub fn application() -> Value {
-    json!(null)
+    get_json_from_var("PLATFORM_APPLICATION")
 }
 pub fn on_enterprise() -> bool {
     is_valid_platform() && env::var("PLATFORM_MODE").unwrap() == "enterprise"
