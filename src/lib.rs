@@ -29,9 +29,9 @@ pub fn variables() -> Value {
 pub fn routes() -> Value {
     get_json_from_var("PLATFORM_ROUTES")
 }
-pub fn get_route(id: &str) -> Value {
+pub fn get_route(id: &str) -> Result<Value, &str> {
     let _ = id;
-    json!(null)
+    Ok(json!(null))
 }
 pub fn application() -> Value {
     json!(null)
