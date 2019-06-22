@@ -24,10 +24,10 @@ pub fn variable(name: &str) -> Result<&str, &str> {
     Ok("Ok")
 }
 pub fn variables() -> Value {
-    json!(null)
+    get_json_from_var("PLATFORM_VARIABLES")
 }
 pub fn routes() -> Value {
-    json!(null)
+    get_json_from_var("PLATFORM_ROUTES")
 }
 pub fn get_route(id: &str) -> Value {
     let _ = id;
