@@ -32,9 +32,12 @@ pub fn credentials(relation: &str) -> Option<Value> {
     Some(relationships[&relation][0].clone())
 }
 
-pub fn variable(name: &str) -> Option<&str> {
-    let _ = name;
-    Some("Ok")
+pub fn variable(name: &str) -> Option<String> {
+    let vars = get_json_from_var("PLATFORM_VARIABLES")?;
+    match vars[&name].is_string() {
+        true => Some(vars[&name].to_string()),
+        false => None,
+    }
 }
 
 pub fn variables() -> Option<Value> {
