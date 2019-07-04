@@ -3,19 +3,17 @@ use std::env;
 use std::str;
 extern crate base64;
 
-pub fn can_get_env(var: &str) -> bool {
+pub fn get_env(var: &str) -> Option<String> {
     match env::var(var) {
-        Ok(_) => true,
-        Err(_) => false,
+        Ok(content) => Some(content),
+        Err(_) => None,
     }
 }
 
 pub fn get_json_from_var(var: &str) -> Option<Value> {
-    if !can_get_env(var) {
-        return None;
-    }
+    let content = get_env(var)?;
 
-    let b64_rel = env::var(var).unwrap();
+    let b64_rel = env::var(content).unwrap();
     let rel = base64::decode(&b64_rel).unwrap();
     Some(serde_json::from_str(str::from_utf8(&rel).unwrap()).unwrap())
 }
