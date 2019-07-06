@@ -71,6 +71,15 @@ pub fn on_production() -> bool {
 }
 
 pub fn has_relationship(relationship: &str) -> bool {
-    let _ = relationship;
-    true
+    let relationships = get_json_from_var("PLATFORM_RELATIONSHIPS");
+
+    let relationships = match relationships {
+        None => return false,
+        Some(rel) => rel,
+    };
+
+    if relationships[&relationship].is_array() {
+        return true;
+    }
+    false
 }
