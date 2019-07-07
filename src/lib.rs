@@ -1,4 +1,4 @@
-use serde_json::{json, Value};
+use serde_json::Value;
 use std::env;
 
 mod env_getter;
@@ -48,9 +48,16 @@ pub fn routes() -> Option<Value> {
     get_json_from_var("PLATFORM_ROUTES")
 }
 
-pub fn get_route(id: &str) -> Option<Value> {
-    let _ = id;
-    Some(json!(null))
+pub fn get_route(id: &str) -> Option<(String, Value)> {
+    let routes = get_json_from_var("PLATFORM_ROUTES")?;
+
+    let routes_it = routes.as_object()?.iter();
+    for (route, settings) in routes_it {
+        if &settings["id"] == id {
+            return Some((route.to_owned(), routes[&route].clone()));
+        }
+    }
+    None
 }
 
 pub fn application() -> Option<Value> {
