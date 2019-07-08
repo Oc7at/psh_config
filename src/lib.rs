@@ -8,30 +8,19 @@ pub use env_getter::*;
 ///
 /// True if configuration can be used, false otherwise.
 pub fn is_valid_platform() -> bool {
-    match get_env("PLATFORM_APPLICATION_NAME") {
-        Some(_) => true,
-        None => false,
-    }
+    get_env("PLATFORM_APPLICATION_NAME").is_some()
 }
 
 /// Checks whether the code is running in a build environment.
 ///
 /// If false, it's running at deploy time.
 pub fn in_build() -> bool {
-    is_valid_platform()
-        && match get_env("PLATFORM_ENVIRONMENT") {
-            Some(_) => false,
-            None => true,
-        }
+    is_valid_platform() && get_env("PLATFORM_ENVIRONMENT").is_none()
 }
 
 /// Checks whether the code is running in a runtime environment.
 pub fn in_runtime() -> bool {
-    is_valid_platform()
-        && match get_env("PLATFORM_ENVIRONMENT") {
-            Some(_) => true,
-            None => false,
-        }
+    is_valid_platform() && get_env("PLATFORM_ENVIRONMENT").is_some()
 }
 
 /// Retrieves the credentials for accessing a relationship.
@@ -53,9 +42,10 @@ pub fn credentials(relation: &str) -> Option<Value> {
 /// Generally it's better to access those variables directly.
 pub fn variable(name: &str) -> Option<String> {
     let vars = get_json_from_var("PLATFORM_VARIABLES")?;
-    match vars[&name].is_string() {
-        true => Some(vars[&name].to_string()),
-        false => None,
+    if vars[&name].is_string() {
+        Some(vars[&name].to_string())
+    } else {
+        None
     }
 }
 
