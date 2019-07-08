@@ -72,7 +72,7 @@ pub fn get_route(id: &str) -> Option<(String, Value)> {
 
     let routes_it = routes.as_object()?.iter();
     for (route, settings) in routes_it {
-        if &settings["id"] == id {
+        if settings["id"] == id {
             return Some((route.to_owned(), routes[&route].clone()));
         }
     }
