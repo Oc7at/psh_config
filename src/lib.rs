@@ -2,6 +2,7 @@ use serde_json::Value;
 use std::env;
 
 mod env_getter;
+mod service;
 pub use env_getter::*;
 
 /// Checks whether the code is running on a platform with valid environment variables.
