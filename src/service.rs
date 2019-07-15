@@ -1,6 +1,7 @@
 use crate::env_getter;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt;
 use std::str;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -38,6 +39,12 @@ struct Query {
     compression: Option<bool>,
     #[serde(default)]
     is_master: Option<bool>,
+}
+
+impl fmt::Display for Service {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}://{}:{}", self.scheme, self.ip, self.port)
+    }
 }
 
 pub fn get_services() -> Option<HashMap<String, Service>> {
