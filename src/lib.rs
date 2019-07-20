@@ -2,6 +2,7 @@ use serde_json::Value;
 use std::env;
 
 pub mod env_getter;
+pub mod route;
 pub mod service;
 pub use env_getter::*;
 
