@@ -13,7 +13,7 @@ pub struct Service {
     host: String,
     port: i64,
     #[serde(default)]
-    rel: String, // It is not always set on Enterprise
+    rel: Option<String>, // It is not always set on Enterprise
     #[serde(default)]
     fragment: Option<String>,
     #[serde(default)]
