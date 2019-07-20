@@ -1,5 +1,8 @@
+use crate::env_getter;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt;
+use std::str;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Route {
@@ -7,9 +10,8 @@ pub struct Route {
     original_url: String,
     restrict_robots: bool,
     http_access: HttpAccess,
-    #[serde(default)]
     #[serde(rename = "type")]
-    type_field: Option<String>,
+    type_field: String,
     #[serde(default)]
     tls: Option<Tls>,
     #[serde(default)]
@@ -62,4 +64,22 @@ pub struct HttpAccess {
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct Ssi {
     enabled: bool,
+}
+
+impl fmt::Display for Route {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{} - {}", self.original_url, self.type_field)
+    }
+}
+
+pub fn get_routes() -> Option<HashMap<String, Route>> {
+    let value = env_getter::get_json_from_var("PLATFORM_ROUTES")?;
+    let value_map = value.as_object().unwrap();
+
+    let mut routes: HashMap<String, Route> = HashMap::new();
+    for (rel_name, route) in value_map {
+        let route_elem: Route = serde_json::from_value(route.clone()).unwrap();
+        routes.insert(rel_name.to_owned(), route_elem);
+    }
+    Some(routes)
 }
