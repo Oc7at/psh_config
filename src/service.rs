@@ -48,10 +48,7 @@ impl fmt::Display for Service {
 }
 
 pub fn get_services() -> Option<HashMap<String, Service>> {
-    let b64_rel = env_getter::get_env("PLATFORM_RELATIONSHIPS")?;
-    let rel = base64::decode(&b64_rel).unwrap();
-    let rel_str = str::from_utf8(&rel).unwrap();
-    let value: serde_json::Value = serde_json::from_str(rel_str).unwrap();
+    let value = env_getter::get_json_from_var("PLATFORM_RELATIONSHIPS")?;
     let value_map = value.as_object().unwrap();
 
     let mut services: HashMap<String, Service> = HashMap::new();
