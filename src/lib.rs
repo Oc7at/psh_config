@@ -106,18 +106,3 @@ pub fn on_production() -> bool {
     };
     env::var("PLATFORM_BRANCH").unwrap() == prod_branch
 }
-
-/// Determines if a relationship is defined, and thus has credentials available.
-pub fn has_relationship(relationship: &str) -> bool {
-    let relationships = get_json_from_var("PLATFORM_RELATIONSHIPS");
-
-    let relationships = match relationships {
-        None => return false,
-        Some(rel) => rel,
-    };
-
-    if relationships[&relationship].is_array() {
-        return true;
-    }
-    false
-}
