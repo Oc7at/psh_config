@@ -4,25 +4,24 @@ use std::env;
 pub mod env_getter;
 pub mod route;
 pub mod service;
-pub use env_getter::*;
 
 /// Checks whether the code is running on a platform with valid environment variables.
 ///
 /// True if configuration can be used, false otherwise.
 pub fn is_valid_platform() -> bool {
-    get_env("PLATFORM_APPLICATION_NAME").is_some()
+    env_getter::get_env("PLATFORM_APPLICATION_NAME").is_some()
 }
 
 /// Checks whether the code is running in a build environment.
 ///
 /// If false, it's running at deploy time.
 pub fn in_build() -> bool {
-    is_valid_platform() && get_env("PLATFORM_ENVIRONMENT").is_none()
+    is_valid_platform() && env_getter::get_env("PLATFORM_ENVIRONMENT").is_none()
 }
 
 /// Checks whether the code is running in a runtime environment.
 pub fn in_runtime() -> bool {
-    is_valid_platform() && get_env("PLATFORM_ENVIRONMENT").is_some()
+    is_valid_platform() && env_getter::get_env("PLATFORM_ENVIRONMENT").is_some()
 }
 
 /// Returns a variable from the VARIABLES array.
@@ -35,7 +34,7 @@ pub fn in_runtime() -> bool {
 ///
 /// Generally it's better to access those variables directly.
 pub fn variable(name: &str) -> Option<String> {
-    let vars = get_json_from_var("PLATFORM_VARIABLES")?;
+    let vars = env_getter::get_json_from_var("PLATFORM_VARIABLES")?;
     if vars[&name].is_string() {
         Some(vars[&name].to_string())
     } else {
@@ -49,7 +48,7 @@ pub fn variable(name: &str) -> Option<String> {
 ///
 /// This method is for cases where you want to scan the whole variables list looking for a pattern.
 pub fn variables() -> Option<Value> {
-    get_json_from_var("PLATFORM_VARIABLES")
+    env_getter::get_json_from_var("PLATFORM_VARIABLES")
 }
 
 /// Returns the application definition array.
@@ -57,7 +56,7 @@ pub fn variables() -> Option<Value> {
 /// This is, approximately, the .platform.app.yaml file as a nested array.  However, it also
 /// has other information added by Platform.sh as part of the build and deploy process.
 pub fn application() -> Option<Value> {
-    get_json_from_var("PLATFORM_APPLICATION")
+    env_getter::get_json_from_var("PLATFORM_APPLICATION")
 }
 
 /// Determines if the current environment is a Platform.sh Enterprise environment.
