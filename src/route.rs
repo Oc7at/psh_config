@@ -72,6 +72,22 @@ impl fmt::Display for Route {
     }
 }
 
+/// Returns a single route definition.
+///
+/// Note: If no route ID was specified in routes.yaml then it will not be possible
+/// to look up a route by ID.
+pub fn get_route<'a>(
+    routes: &'a HashMap<String, Route>,
+    id: &str,
+) -> Option<(&'a String, &'a Route)> {
+    for (name, route) in routes {
+        if route.id == Some(id.to_owned()) {
+            return Some((name, route));
+        }
+    }
+    None
+}
+
 pub fn get_routes() -> Option<HashMap<String, Route>> {
     let value = env_getter::get_json_from_var("PLATFORM_ROUTES")?;
     let value_map = value.as_object().unwrap();

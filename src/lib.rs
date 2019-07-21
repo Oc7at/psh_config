@@ -25,14 +25,6 @@ pub fn in_runtime() -> bool {
     is_valid_platform() && get_env("PLATFORM_ENVIRONMENT").is_some()
 }
 
-/// Retrieves the credentials for accessing a relationship.
-///
-/// The relationship must be defined in the .platform.app.yaml file.
-pub fn credentials(relation: &str) -> Option<Value> {
-    let relationships = get_json_from_var("PLATFORM_RELATIONSHIPS")?;
-    Some(relationships[&relation][0].clone())
-}
-
 /// Returns a variable from the VARIABLES array.
 ///
 /// Note: variables prefixed with `env:` can be accessed as normal environment
@@ -58,27 +50,6 @@ pub fn variable(name: &str) -> Option<String> {
 /// This method is for cases where you want to scan the whole variables list looking for a pattern.
 pub fn variables() -> Option<Value> {
     get_json_from_var("PLATFORM_VARIABLES")
-}
-
-/// Returns the routes definition.
-pub fn routes() -> Option<Value> {
-    get_json_from_var("PLATFORM_ROUTES")
-}
-
-/// Returns a single route definition.
-///
-/// Note: If no route ID was specified in routes.yaml then it will not be possible
-/// to look up a route by ID.
-pub fn get_route(id: &str) -> Option<(String, Value)> {
-    let routes = get_json_from_var("PLATFORM_ROUTES")?;
-
-    let routes_it = routes.as_object()?.iter();
-    for (route, settings) in routes_it {
-        if settings["id"] == id {
-            return Some((route.to_owned(), routes[&route].clone()));
-        }
-    }
-    None
 }
 
 /// Returns the application definition array.
