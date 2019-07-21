@@ -47,6 +47,9 @@ impl fmt::Display for Service {
     }
 }
 
+/// Retrieves the credentials for accessing a relationship.
+///
+/// The relationship must be defined in the .platform.app.yaml file.
 pub fn get_services() -> Option<HashMap<String, Service>> {
     let value = env_getter::get_json_from_var("PLATFORM_RELATIONSHIPS")?;
     let value_map = value.as_object().unwrap();
