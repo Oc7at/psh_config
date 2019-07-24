@@ -54,6 +54,10 @@ pub fn get_services() -> Option<HashMap<String, Service>> {
     let value = env_getter::get_json_from_var("PLATFORM_RELATIONSHIPS")?;
     let value_map = value.as_object().unwrap();
 
+    if !super::in_runtime() {
+        return None;
+    }
+
     let mut services: HashMap<String, Service> = HashMap::new();
     for (rel_name, relation) in value_map {
         let service: Service = serde_json::from_value(relation[0].clone()).unwrap();
@@ -71,6 +75,8 @@ mod tests {
     fn test_nonexistant_service() {
         let relationships = "eyJkYXRhYmFzZSI6IFt7InVzZXJuYW1lIjogInVzZXIiLCAic2NoZW1lIjogIm15c3FsIiwgInNlcnZpY2UiOiAibXlzcWxkYiIsICJmcmFnbWVudCI6IG51bGwsICJpcCI6ICIxNjkuMjU0LjEyMS4xODYiLCAiaG9zdG5hbWUiOiAiN29waWd5Z28yMm1xemtoYXk0cHRncXI0Y3kubXlzcWxkYi5zZXJ2aWNlLl8uZXUtMi5wbGF0Zm9ybXNoLnNpdGUiLCAicHVibGljIjogZmFsc2UsICJjbHVzdGVyIjogInNjZXZtamZyeHUzcGstbWFzdGVyLTdycXR3dGkiLCAiaG9zdCI6ICJkYXRhYmFzZS5pbnRlcm5hbCIsICJyZWwiOiAibXlzcWwiLCAicXVlcnkiOiB7ImlzX21hc3RlciI6IHRydWV9LCAicGF0aCI6ICJtYWluIiwgInBhc3N3b3JkIjogIiIsICJ0eXBlIjogIm15c3FsOjEwLjIiLCAicG9ydCI6IDMzMDZ9XX0=";
         env::set_var("PLATFORM_RELATIONSHIPS", relationships);
+        env::set_var("PLATFORM_APPLICATION_NAME", "test-app");
+        env::set_var("PLATFORM_ENVIRONMENT", "test env please ignore");
 
         let services = get_services().unwrap();
         assert_eq!(None, services.get("redis-cache"));
@@ -80,6 +86,9 @@ mod tests {
     fn test_existant_service() {
         let relationships = "eyJkYXRhYmFzZSI6IFt7InVzZXJuYW1lIjogInVzZXIiLCAic2NoZW1lIjogIm15c3FsIiwgInNlcnZpY2UiOiAibXlzcWxkYiIsICJmcmFnbWVudCI6IG51bGwsICJpcCI6ICIxNjkuMjU0LjEyMS4xODYiLCAiaG9zdG5hbWUiOiAiN29waWd5Z28yMm1xemtoYXk0cHRncXI0Y3kubXlzcWxkYi5zZXJ2aWNlLl8uZXUtMi5wbGF0Zm9ybXNoLnNpdGUiLCAicHVibGljIjogZmFsc2UsICJjbHVzdGVyIjogInNjZXZtamZyeHUzcGstbWFzdGVyLTdycXR3dGkiLCAiaG9zdCI6ICJkYXRhYmFzZS5pbnRlcm5hbCIsICJyZWwiOiAibXlzcWwiLCAicXVlcnkiOiB7ImlzX21hc3RlciI6IHRydWV9LCAicGF0aCI6ICJtYWluIiwgInBhc3N3b3JkIjogIiIsICJ0eXBlIjogIm15c3FsOjEwLjIiLCAicG9ydCI6IDMzMDZ9XX0=";
         env::set_var("PLATFORM_RELATIONSHIPS", relationships);
+        env::set_var("PLATFORM_APPLICATION_NAME", "test-app");
+        env::set_var("PLATFORM_ENVIRONMENT", "test env please ignore");
+
         let database = Service {
             scheme: "mysql".to_string(),
             service: "mysqldb".to_string(),
