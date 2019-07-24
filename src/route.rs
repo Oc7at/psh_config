@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::fmt;
 use std::str;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct Route {
     primary: bool,
     original_url: String,
@@ -26,7 +26,7 @@ pub struct Route {
     ssi: Option<Ssi>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct Tls {
     client_certificate_authorities: Vec<String>,
     #[serde(default)]
@@ -37,7 +37,7 @@ pub struct Tls {
     strict_transport_authorities: Option<StrictTransportSecurity>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct StrictTransportSecurity {
     #[serde(default)]
     include_subdomains: Option<bool>,
@@ -47,7 +47,7 @@ pub struct StrictTransportSecurity {
     preload: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct Cache {
     enabled: bool,
     default_ttl: i64,
@@ -55,13 +55,13 @@ pub struct Cache {
     cookies: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct HttpAccess {
     addresses: Vec<String>,
     basic_auth: HashMap<String, String>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Default)]
+#[derive(Serialize, Deserialize, Debug, Default, PartialEq)]
 pub struct Ssi {
     enabled: bool,
 }
