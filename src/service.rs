@@ -54,7 +54,7 @@ pub fn get_services() -> Option<HashMap<String, Service>> {
     let value = env_getter::get_json_from_var("PLATFORM_RELATIONSHIPS")?;
     let value_map = value.as_object().unwrap();
 
-    if !super::in_runtime() {
+    if !config::in_runtime() {
         return None;
     }
 
